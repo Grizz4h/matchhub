@@ -1,0 +1,7 @@
+[app]
+db_path = "data/matchhub.db"
+server_port = 9500
+
+[del]
+season_slug = "saison-2025-26"
+phase = "hauptrunde"
