@@ -1,0 +1,557 @@
+{
+  "updated_at": "2026-01-02T09:27:22+01:00",
+  "data": [
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Kölner Haie",
+      "away": "Straubing Tigers",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Eisbären Berlin",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Adler Mannheim",
+      "away": "Dresdner Eislöwen",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Augsburger Panther",
+      "away": "Schwenninger Wild Wings",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "ERC Ingolstadt",
+      "away": "Pinguins Bremerhaven",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Iserlohn Roosters",
+      "away": "Nürnberg Ice Tigers",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-02",
+      "time": "19:30",
+      "matchday": 35,
+      "home": "Grizzlys Wolfsburg",
+      "away": "EHC Red Bull München",
+      "faceoff": "2026-01-02T19:30+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "14:00",
+      "matchday": 36,
+      "home": "Pinguins Bremerhaven",
+      "away": "Iserlohn Roosters",
+      "faceoff": "2026-01-04T14:00+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "14:00",
+      "matchday": 36,
+      "home": "Eisbären Berlin",
+      "away": "Augsburger Panther",
+      "faceoff": "2026-01-04T14:00+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "14:00",
+      "matchday": 36,
+      "home": "Löwen Frankfurt",
+      "away": "Schwenninger Wild Wings",
+      "faceoff": "2026-01-04T14:00+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "16:30",
+      "matchday": 36,
+      "home": "Dresdner Eislöwen",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-04T16:30+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "16:30",
+      "matchday": 36,
+      "home": "EHC Red Bull München",
+      "away": "Adler Mannheim",
+      "faceoff": "2026-01-04T16:30+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "16:30",
+      "matchday": 36,
+      "home": "Straubing Tigers",
+      "away": "ERC Ingolstadt",
+      "faceoff": "2026-01-04T16:30+01:00"
+    },
+    {
+      "date": "2026-01-04",
+      "time": "19:00",
+      "matchday": 36,
+      "home": "Nürnberg Ice Tigers",
+      "away": "Grizzlys Wolfsburg",
+      "faceoff": "2026-01-04T19:00+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "14:00",
+      "matchday": 37,
+      "home": "Schwenninger Wild Wings",
+      "away": "Grizzlys Wolfsburg",
+      "faceoff": "2026-01-06T14:00+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "16:30",
+      "matchday": 37,
+      "home": "Nürnberg Ice Tigers",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-06T16:30+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "16:30",
+      "matchday": 37,
+      "home": "ERC Ingolstadt",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-06T16:30+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "16:30",
+      "matchday": 37,
+      "home": "EHC Red Bull München",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-06T16:30+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "19:00",
+      "matchday": 37,
+      "home": "Augsburger Panther",
+      "away": "Iserlohn Roosters",
+      "faceoff": "2026-01-06T19:00+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "19:00",
+      "matchday": 37,
+      "home": "Straubing Tigers",
+      "away": "Adler Mannheim",
+      "faceoff": "2026-01-06T19:00+01:00"
+    },
+    {
+      "date": "2026-01-06",
+      "time": "19:30",
+      "matchday": 37,
+      "home": "Dresdner Eislöwen",
+      "away": "Pinguins Bremerhaven",
+      "faceoff": "2026-01-06T19:30+01:00"
+    },
+    {
+      "date": "2026-01-08",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "Iserlohn Roosters",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-08T19:30+01:00"
+    },
+    {
+      "date": "2026-01-09",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "Löwen Frankfurt",
+      "away": "Adler Mannheim",
+      "faceoff": "2026-01-09T19:30+01:00"
+    },
+    {
+      "date": "2026-01-09",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "Pinguins Bremerhaven",
+      "away": "Nürnberg Ice Tigers",
+      "faceoff": "2026-01-09T19:30+01:00"
+    },
+    {
+      "date": "2026-01-09",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "ERC Ingolstadt",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-09T19:30+01:00"
+    },
+    {
+      "date": "2026-01-09",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "Straubing Tigers",
+      "away": "EHC Red Bull München",
+      "faceoff": "2026-01-09T19:30+01:00"
+    },
+    {
+      "date": "2026-01-09",
+      "time": "19:30",
+      "matchday": 38,
+      "home": "Grizzlys Wolfsburg",
+      "away": "Augsburger Panther",
+      "faceoff": "2026-01-09T19:30+01:00"
+    },
+    {
+      "date": "2026-01-10",
+      "time": "17:00",
+      "matchday": 39,
+      "home": "Dresdner Eislöwen",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-10T17:00+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "14:00",
+      "matchday": 39,
+      "home": "Grizzlys Wolfsburg",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-11T14:00+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "16:30",
+      "matchday": 39,
+      "home": "Augsburger Panther",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-11T16:30+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "16:30",
+      "matchday": 39,
+      "home": "Adler Mannheim",
+      "away": "Pinguins Bremerhaven",
+      "faceoff": "2026-01-11T16:30+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "16:30",
+      "matchday": 39,
+      "home": "Nürnberg Ice Tigers",
+      "away": "ERC Ingolstadt",
+      "faceoff": "2026-01-11T16:30+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "16:30",
+      "matchday": 39,
+      "home": "EHC Red Bull München",
+      "away": "Iserlohn Roosters",
+      "faceoff": "2026-01-11T16:30+01:00"
+    },
+    {
+      "date": "2026-01-11",
+      "time": "19:00",
+      "matchday": 39,
+      "home": "Schwenninger Wild Wings",
+      "away": "Straubing Tigers",
+      "faceoff": "2026-01-11T19:00+01:00"
+    },
+    {
+      "date": "2026-01-15",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "Schwenninger Wild Wings",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-15T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "Iserlohn Roosters",
+      "away": "Grizzlys Wolfsburg",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "EHC Red Bull München",
+      "away": "Dresdner Eislöwen",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "Adler Mannheim",
+      "away": "Nürnberg Ice Tigers",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "Augsburger Panther",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "ERC Ingolstadt",
+      "away": "Straubing Tigers",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-16",
+      "time": "19:30",
+      "matchday": 40,
+      "home": "Pinguins Bremerhaven",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-16T19:30+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "14:00",
+      "matchday": 41,
+      "home": "Nürnberg Ice Tigers",
+      "away": "EHC Red Bull München",
+      "faceoff": "2026-01-18T14:00+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "14:00",
+      "matchday": 41,
+      "home": "Löwen Frankfurt",
+      "away": "ERC Ingolstadt",
+      "faceoff": "2026-01-18T14:00+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "14:00",
+      "matchday": 41,
+      "home": "Grizzlys Wolfsburg",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-18T14:00+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "16:30",
+      "matchday": 41,
+      "home": "Kölner Haie",
+      "away": "Iserlohn Roosters",
+      "faceoff": "2026-01-18T16:30+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "16:30",
+      "matchday": 41,
+      "home": "Dresdner Eislöwen",
+      "away": "Adler Mannheim",
+      "faceoff": "2026-01-18T16:30+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "16:30",
+      "matchday": 41,
+      "home": "Straubing Tigers",
+      "away": "Augsburger Panther",
+      "faceoff": "2026-01-18T16:30+01:00"
+    },
+    {
+      "date": "2026-01-18",
+      "time": "19:00",
+      "matchday": 41,
+      "home": "Pinguins Bremerhaven",
+      "away": "Schwenninger Wild Wings",
+      "faceoff": "2026-01-18T19:00+01:00"
+    },
+    {
+      "date": "2026-01-22",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Adler Mannheim",
+      "away": "Grizzlys Wolfsburg",
+      "faceoff": "2026-01-22T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Straubing Tigers",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Schwenninger Wild Wings",
+      "away": "Kölner Haie",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "EHC Red Bull München",
+      "away": "Pinguins Bremerhaven",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Dresdner Eislöwen",
+      "away": "Iserlohn Roosters",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Eisbären Berlin",
+      "away": "ERC Ingolstadt",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-23",
+      "time": "19:30",
+      "matchday": 42,
+      "home": "Nürnberg Ice Tigers",
+      "away": "Augsburger Panther",
+      "faceoff": "2026-01-23T19:30+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "14:00",
+      "matchday": 43,
+      "home": "Adler Mannheim",
+      "away": "EHC Red Bull München",
+      "faceoff": "2026-01-25T14:00+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "14:00",
+      "matchday": 43,
+      "home": "Augsburger Panther",
+      "away": "Pinguins Bremerhaven",
+      "faceoff": "2026-01-25T14:00+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "14:00",
+      "matchday": 43,
+      "home": "Iserlohn Roosters",
+      "away": "Straubing Tigers",
+      "faceoff": "2026-01-25T14:00+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "16:30",
+      "matchday": 43,
+      "home": "Kölner Haie",
+      "away": "Nürnberg Ice Tigers",
+      "faceoff": "2026-01-25T16:30+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "16:30",
+      "matchday": 43,
+      "home": "Löwen Frankfurt",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-25T16:30+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "16:30",
+      "matchday": 43,
+      "home": "ERC Ingolstadt",
+      "away": "Schwenninger Wild Wings",
+      "faceoff": "2026-01-25T16:30+01:00"
+    },
+    {
+      "date": "2026-01-25",
+      "time": "19:00",
+      "matchday": 43,
+      "home": "Grizzlys Wolfsburg",
+      "away": "Dresdner Eislöwen",
+      "faceoff": "2026-01-25T19:00+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Kölner Haie",
+      "away": "Löwen Frankfurt",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Augsburger Panther",
+      "away": "Eisbären Berlin",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Pinguins Bremerhaven",
+      "away": "Grizzlys Wolfsburg",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "ERC Ingolstadt",
+      "away": "Dresdner Eislöwen",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Iserlohn Roosters",
+      "away": "Adler Mannheim",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Straubing Tigers",
+      "away": "Nürnberg Ice Tigers",
+      "faceoff": "2026-01-27T19:30+01:00"
+    },
+    {
+      "date": "2026-01-27",
+      "time": "19:30",
+      "matchday": 44,
+      "home": "Schwenninger Wild Wings",
+      "away": "EHC Red Bull München",
+      "faceoff": "2026-01-27T19:30+01:00"
+    }
+  ]
+}

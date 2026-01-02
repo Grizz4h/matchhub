@@ -1,0 +1,90 @@
+{
+  "updated_at": "2026-01-02T09:27:22+01:00",
+  "data": {
+    "team": "Pinguins Bremerhaven",
+    "last_10_form": "4-5",
+    "recent_games": [
+      {
+        "date": "2025-12-30",
+        "score": "6 - 4",
+        "team_score": 4,
+        "opponent_score": 6,
+        "result": "L",
+        "ot_so": "",
+        "matchday": 34
+      },
+      {
+        "date": "2025-12-28",
+        "score": "5 - 4 (OT)",
+        "team_score": 4,
+        "opponent_score": 5,
+        "result": "L",
+        "ot_so": "OT/SO",
+        "matchday": 33
+      },
+      {
+        "date": "2025-12-26",
+        "score": "3 - 0",
+        "team_score": 0,
+        "opponent_score": 3,
+        "result": "L",
+        "ot_so": "",
+        "matchday": 32
+      },
+      {
+        "date": "2025-12-23",
+        "score": "0 - 4",
+        "team_score": 4,
+        "opponent_score": 0,
+        "result": "W",
+        "ot_so": "",
+        "matchday": 31
+      },
+      {
+        "date": "2025-12-21",
+        "score": "3 - 6",
+        "team_score": 6,
+        "opponent_score": 3,
+        "result": "W",
+        "ot_so": "",
+        "matchday": 30
+      },
+      {
+        "date": "2025-12-19",
+        "score": "3 - 2",
+        "team_score": 2,
+        "opponent_score": 3,
+        "result": "L",
+        "ot_so": "",
+        "matchday": 29
+      },
+      {
+        "date": "2025-12-14",
+        "score": "2 - 1 (OT)",
+        "team_score": 1,
+        "opponent_score": 2,
+        "result": "L",
+        "ot_so": "OT/SO",
+        "matchday": 28
+      },
+      {
+        "date": "2025-12-12",
+        "score": "4 - 5",
+        "team_score": 5,
+        "opponent_score": 4,
+        "result": "W",
+        "ot_so": "",
+        "matchday": 27
+      },
+      {
+        "date": "2025-12-07",
+        "score": "2 - 5",
+        "team_score": 5,
+        "opponent_score": 2,
+        "result": "W",
+        "ot_so": "",
+        "matchday": 26
+      }
+    ]
+  }
+}

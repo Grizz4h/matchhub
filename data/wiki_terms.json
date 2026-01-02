@@ -1,0 +1,93 @@
+{
+  "Center-Positionierung": {
+    "short": "Der Center ist der Knotenpunkt zwischen Wings und Defense.",
+    "details": "Position im mittleren Drittel, um Support-Dreiecke zu bilden und schnelle Transitions zu ermöglichen. Zu hohe Position (zu nah an den Wings) öffnet gefährliche Lücken in der Defensive Zone.",
+    "watch": [
+      "Steht der Center zu hoch (zu nah bei den Wings)?",
+      "Bildet sich ein Dreieck zwischen Center und Wings?",
+      "Kann der Center schnell zurückfallen bei Puckverlust?"
+    ]
+  },
+  "Dreiecke & Lücken": {
+    "short": "3-Spieler-Struktur für Support & Coverage.",
+    "details": "Ein Dreieck entsteht, wenn drei Spieler so positioniert sind, dass sie sich gegenseitig absichern und Passwege öffnen. Reißt das Dreieck auf (z.B. durch zu hohe Center-Position), entstehen gefährliche Lücken.",
+    "watch": [
+      "Bleiben die Dreiecke intakt während des Angriffs?",
+      "Wo reißen Lücken auf (Center zu hoch, Wings zu breit)?",
+      "Können Gegner durch die Lücken kontern?"
+    ]
+  },
+  "Forecheck-Struktur": {
+    "short": "Organisierter Druck in der Offensivzone des Gegners.",
+    "details": "System aus 1-2-2, 2-1-2 oder anderen Formationen, um den Puck schnell zurückzugewinnen. Abhängig von Energie, Spielstand und Gegner. Erfordert Disziplin und Kommunikation.",
+    "watch": [
+      "Welches System wird gefahren (1-2-2, 2-1-2, etc.)?",
+      "Ist der Forecheck koordiniert oder chaotisch?",
+      "Wie schnell kommt der Puck zurück?",
+      "Entstehen Konterchancen für den Gegner?"
+    ]
+  },
+  "Special Teams": {
+    "short": "Powerplay (Überzahl) und Penalty Kill (Unterzahl).",
+    "details": "Entscheidende Phasen: PP nutzt den Extra-Mann für Scoring-Chancen, PK verteidigt mit einem Mann weniger. Struktur, Disziplin und Execution sind kritisch.",
+    "watch": [
+      "Wie sieht die PP-Formation aus (Umbrella, Overload, etc.)?",
+      "Funktioniert die PK-Box oder wird sie aufgebrochen?",
+      "Werden klare Chancen kreiert/verhindert?"
+    ]
+  },
+  "Goalie & Rebounds": {
+    "short": "Rebound-Control und Positionsspiel des Goalies.",
+    "details": "Ein Goalie, der Rebounds nicht kontrolliert, gibt dem Gegner zweite Chancen. Positionsspiel (Winkel, Depth) bestimmt, wie groß das Tor für den Schützen wirkt.",
+    "watch": [
+      "Werden Rebounds weggelenkt oder zurück ins Slot gespielt?",
+      "Wie ist das Positionsspiel bei Querpässen?",
+      "Gibt es viele zweite Chancen?"
+    ]
+  },
+  "Momentum & Emotion": {
+    "short": "Schwung und emotionale Kontrolle im Spielverlauf.",
+    "details": "Momentum = Spielfluss und Schwung, oft nach Toren oder Big Hits. Emotionen können das Team antreiben oder zu Strafen führen. Management ist entscheidend.",
+    "watch": [
+      "Wann kippt das Momentum (nach Toren, Strafen, Checks)?",
+      "Wie reagiert das Team auf Rückschläge?",
+      "Bleiben die Spieler diszipliniert oder werden Emotionen zum Problem?"
+    ]
+  },
+  "Neutral Zone": {
+    "short": "Mittleres Drittel zwischen den beiden blauen Linien.",
+    "details": "Entscheidend für Transitions. Kontrolliert das Team die Neutral Zone, kann es Angriffe strukturiert aufbauen. Verliert es die Kontrolle, entstehen gefährliche Konter.",
+    "watch": [
+      "Wie wird die Neutral Zone durchquert (Dump & Chase, kontrollierter Aufbau)?",
+      "Stehen die Verteidiger richtig (Gap Control)?",
+      "Gibt es viele Turnovers in der Neutral Zone?"
+    ]
+  },
+  "Gap Control": {
+    "short": "Abstand zwischen Verteidiger und Angreifer.",
+    "details": "Zu großer Gap = Angreifer hat Raum und Zeit. Zu kleiner Gap = Risiko, ausgespielt zu werden. Richtige Balance ist situationsabhängig.",
+    "watch": [
+      "Halten die Verteidiger den richtigen Abstand?",
+      "Werden Angreifer zu früh/spät attackiert?",
+      "Wie oft werden Verteidiger 1-on-1 ausgespielt?"
+    ]
+  },
+  "Slot": {
+    "short": "Bereich direkt vor dem Tor – höchste Scoring-Chance.",
+    "details": "Der Slot ist die Hochgefahrenzone. Shots aus dem Slot haben die höchste Erfolgsquote. Defense muss den Slot verteidigen, Offense muss ihn erobern.",
+    "watch": [
+      "Wird der Slot effektiv verteidigt?",
+      "Wie viele Schüsse kommen aus dem Slot?",
+      "Können Spieler ungestört im Slot agieren?"
+    ]
+  },
+  "Breakout": {
+    "short": "Strukturierter Puck-Transport aus der eigenen Zone.",
+    "details": "System (z.B. D-to-D Pass, Reverse, Wheel), um den Puck sicher aus der Defensive Zone zu bringen. Saubere Breakouts verhindern Turnovers und ermöglichen Angriffe.",
+    "watch": [
+      "Welches Breakout-System wird verwendet?",
+      "Wie oft gelingt ein sauberer Breakout?",
+      "Wo entstehen Turnovers (Behind Net, Boards, Center Ice)?"
+    ]
+  }
+}
