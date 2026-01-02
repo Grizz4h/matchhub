@@ -1,4 +1,6 @@
 streamlit
+streamlit-authenticator
+PyYAML
 requests
 beautifulsoup4
 lxml

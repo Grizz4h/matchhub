@@ -1,0 +1,26 @@
+{
+  "user": "martin",
+  "season": "2025-26",
+  "mode": "simple",
+  "game": {
+    "date": "2026-01-02",
+    "time": "19:30",
+    "matchday": 35,
+    "home": "ERC Ingolstadt",
+    "away": "Pinguins Bremerhaven",
+    "erc": "ERC Ingolstadt"
+  },
+  "ratings": {
+    "nervous": 3,
+    "confidence_team": 4,
+    "expectation": 4,
+    "mood": 4
+  },
+  "tip": "ERC verliert (reg.)",
+  "focus_tags": [],
+  "notes": {
+    "one_liner": "",
+    "focus_observation": ""
+  },
+  "submitted_at": "2026-01-02T12:09:35+01:00"
+}

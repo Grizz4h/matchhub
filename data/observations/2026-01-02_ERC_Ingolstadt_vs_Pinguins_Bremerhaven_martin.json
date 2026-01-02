@@ -1,0 +1,43 @@
+{
+  "user": "martin",
+  "game": {
+    "date": "2026-01-02",
+    "home": "ERC Ingolstadt",
+    "away": "Pinguins Bremerhaven",
+    "matchday": 35
+  },
+  "focus": "CENTER_TRIANGLES",
+  "last_updated": "2026-01-02T13:33:53.872161",
+  "periods": {
+    "1": {
+      "period": 1,
+      "timestamp": "2026-01-02T13:33:53.869645",
+      "answers": {
+        "center_position": "middle",
+        "triangle_rating": 1,
+        "breakout_quality": "sauber",
+        "note": ""
+      }
+    },
+    "2": {
+      "period": 2,
+      "timestamp": "2026-01-02T13:25:10.952812",
+      "answers": {
+        "center_position": "low",
+        "triangle_rating": 3,
+        "breakout_quality": "sauber",
+        "note": ""
+      }
+    },
+    "3": {
+      "period": 3,
+      "timestamp": "2026-01-02T13:33:03.606202",
+      "answers": {
+        "center_position": "low",
+        "triangle_rating": 3,
+        "breakout_quality": "gemischt",
+        "note": ""
+      }
+    }
+  }
+}

@@ -228,6 +228,12 @@ def fetch_team_recent_games(cache_dir: Path, team_name: str) -> CacheWrite:
     """
     Fetches recent game results from team overview page.
     Parses "Letzte Ergebnisse" table.
+    
+    The HTML structure shows:
+    - First team-meta div = Home team (with img alt="Team Name")
+    - Second team-meta div = Away team
+    - Scores are always: Home - Away
+    - Winner has class="team-result__score--win" on their score
     """
     slug = TEAM_SLUG_MAPPING.get(team_name)
     if not slug:
@@ -236,49 +242,101 @@ def fetch_team_recent_games(cache_dir: Path, team_name: str) -> CacheWrite:
     url = TEAM_BASE_URL.format(slug=slug)
     html = _http_get(url)
     
-    # Parse all tables on the page
+    # Parse tables with pandas
     tables = pd.read_html(html)
     
-    # Find the "Letzte Ergebnisse" table (usually has Date, Score, Matchday columns)
     recent_games = []
     for df in tables:
         df = df.copy()
-        # Typical columns: Date, Score, Matchday, (sometimes empty columns)
-        if len(df.columns) >= 3 and len(df) >= 5:  # At least some results
-            # Check if it looks like results table
+        if len(df.columns) >= 3 and len(df) >= 5:
             first_col = str(df.iloc[0, 0]).strip()
-            if re.match(r"\d{2}\.\d{2}\.\d{4}", first_col):  # Date format
-                # This is likely the recent results table
-                for _, row in df.iterrows():
+            if re.match(r"\d{2}\.\d{2}\.\d{4}", first_col):
+                # Found the results table
+                for idx, row in df.iterrows():
                     try:
                         date_str = _clean(str(row.iloc[0]))
                         score_str = _clean(str(row.iloc[1]))
                         matchday_str = _clean(str(row.iloc[2])) if len(row) > 2 else None
                         
-                        # Parse date
                         game_date = datetime.strptime(date_str, "%d.%m.%Y").date()
                         
-                        # Parse score and determine result
-                        # Format on team page: "Opponent - Team" (e.g., "5 - 3" means opponent scored 5, team scored 3)
+                        # Parse score: "X - Y" or "X - Y (OT)" or "X - Y (SO)"
                         score_match = re.match(r"(\d+)\s*-\s*(\d+)", score_str)
                         if not score_match:
                             continue
                         
-                        opponent_score = int(score_match.group(1))
-                        team_score = int(score_match.group(2))
+                        home_score = int(score_match.group(1))
+                        away_score = int(score_match.group(2))
                         
-                        # Determine win/loss (from team's perspective)
+                        is_ot = "(OT)" in score_str or "n.V." in score_str
+                        is_so = "(SO)" in score_str or "n.P." in score_str
+                        is_overtime = is_ot or is_so
+                        
+                        # Find the specific row in HTML using the EXACT date
+                        # Use BeautifulSoup for reliable parsing
+                        from bs4 import BeautifulSoup
+                        soup = BeautifulSoup(html, 'lxml')
+                        
+                        # Find the table
+                        table = None
+                        for t in soup.find_all('table'):
+                            if date_str in t.get_text():
+                                table = t
+                                break
+                        
+                        if not table:
+                            continue
+                        
+                        # Find the row with this exact date
+                        target_row = None
+                        for tr in table.find_all('tr'):
+                            date_cell = tr.find('td', class_='team-result__date')
+                            if date_cell and date_cell.get_text(strip=True) == date_str:
+                                target_row = tr
+                                break
+                        
+                        if not target_row:
+                            continue
+                        
+                        # Extract team logos from this specific row
+                        team_logos_imgs = target_row.find_all('figure', class_='team-meta__logo')
+                        if len(team_logos_imgs) < 2:
+                            continue
+                        
+                        team_names = []
+                        for fig in team_logos_imgs[:2]:
+                            img = fig.find('img')
+                            if img and img.get('alt'):
+                                team_names.append(img['alt'])
+                        
+                        if len(team_names) < 2:
+                            continue
+                        
+                        home_team = team_names[0]
+                        away_team = team_names[1]
+                        
+                        # Determine if our team is home or away
+                        is_home = (home_team == team_name)
+                        is_away = (away_team == team_name)
+                        
+                        if not (is_home or is_away):
+                            # Team name mismatch, skip
+                            continue
+                        
+                        # Calculate team scores from perspective
+                        team_score = home_score if is_home else away_score
+                        opponent_score = away_score if is_home else home_score
+                        
+                        # Determine result - use simple score comparison
+                        # Works for both regular and OT/SO games
                         if team_score > opponent_score:
-                            result = "W"
+                            result = "OTW" if is_overtime else "W"
                         elif team_score < opponent_score:
-                            result = "L"
+                            result = "OTL" if is_overtime else "L"
                         else:
-                            result = "OTL"  # Shouldn't happen in displayed score
+                            result = "T"  # Shouldn't happen in DEL
                         
-                        # Check for OT/SO
-                        ot_so = ""
-                        if "(OT)" in score_str or "(SO)" in score_str:
-                            ot_so = "OT/SO"
+                        ot_so = "OT/SO" if is_overtime else ""
                         
                         matchday = None
                         try:
