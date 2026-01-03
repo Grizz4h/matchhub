@@ -1,7 +1,7 @@
 {
-  "user": "martin",
+  "user": "christoph",
   "season": "2025-26",
-  "mode": "simple",
+  "mode": "nerd",
   "game": {
     "date": "2026-01-02",
     "time": "19:30",
@@ -11,16 +11,18 @@
     "erc": "ERC Ingolstadt"
   },
   "ratings": {
-    "nervous": 2,
-    "confidence_team": 4,
-    "expectation": 3,
-    "mood": 3
+    "nervous": 5,
+    "confidence_team": 3,
+    "expectation": 5,
+    "mood": 6
   },
   "tip": "ERC Sieg (reg.)",
-  "focus_tags": [],
+  "focus_tags": [
+    "Center-Positionierung"
+  ],
   "notes": {
     "one_liner": "",
     "focus_observation": ""
   },
-  "submitted_at": "2026-01-02T17:57:36+01:00"
+  "submitted_at": "2026-01-02T17:41:40+01:00"
 }

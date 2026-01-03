@@ -582,7 +582,24 @@ def refresh():
     st.success("Cache aktualisiert.")
 
 
+
+# =====================================
+# SIDEBAR: TOP-LEVEL NAVIGATION
+# =====================================
+
 with st.sidebar:
+    main_area = st.radio("🏒 Bereich", ["MATCHHUB", "ACADEMY"], key="main_area")
+    
+    st.divider()
+    
+    if main_area == "ACADEMY":
+        academy_page = st.radio(
+            "Academy",
+            ["Curriculum", "Session Trainer", "Glossar", "Fortschritt", "Historie"],
+            key="academy_page"
+        )
+        st.divider()
+    
     st.subheader("Admin")
     st.button("DEL-Daten aktualisieren", on_click=refresh)
     st.caption("Kein Cron. Nur per Button.")
@@ -596,589 +613,647 @@ with st.sidebar:
 # Use username from auth instead of selector
 user = username
 
-table_wrap = read_cache(TABLE_CACHE)
-fixtures_wrap = read_cache(FIXTURES_CACHE)
 
-if not table_wrap or not fixtures_wrap:
-    st.warning("Cache ist leer. Links im Sidebar auf **DEL-Daten aktualisieren** klicken.")
-    st.stop()
+# =====================================
+# ROUTING: MATCHHUB vs ACADEMY
+# =====================================
 
-table = table_wrap["data"]
-fixtures = fixtures_wrap["data"]
-
-next_game = pick_next_erc_game(fixtures)
-if not next_game:
-    st.error("Kein nächstes ERC-Spiel im Spielplan gefunden (oder Parser greift nicht).")
-    st.stop()
-
-home = next_game["home"]
-away = next_game["away"]
-opponent = away if home == ERC_NAME else home
-
-erc_row = find_team_row(table, ERC_NAME)
-opp_row = find_team_row(table, opponent)
-
-tabs = st.tabs(["Heute", "Pre-Match Check", "Beobachtung", "Historie", "Wiki"])
-
-with tabs[0]:
+if main_area == "ACADEMY":
     # =====================================
-    # MATCH HEADER mit Logos & Stats
+    # ACADEMY PAGES
     # =====================================
-    st.subheader("Nächstes Spiel")
+    from academy.pages.curriculum_page import render_curriculum_page
+    from academy.pages.session_trainer_page import render_session_trainer_page
+    from academy.pages.history_page import render_history_page
+    from academy.pages.glossary_page import render_glossary_page
+    from academy.pages.progress_page import render_progress_page
     
-    # HOME TEAM
-    with st.container(border=True):
-        col_h_logo, col_h_info = st.columns([1, 3])
-        with col_h_logo:
-            team_logo(home, width=80)
-        with col_h_info:
-            st.markdown(f"### {home}")
-            if home == ERC_NAME:
-                st.caption("🏠 Heimspiel")
-            else:
-                st.caption("✈️ Auswärts")
-            
-            # Stats inline
-            if erc_row and home == ERC_NAME:
-                st.markdown(f"**Platz #{erc_row.get('#', '?')}** · {erc_row.get('P', '?')} Punkte · Tore {erc_row.get('GF', '?')}:{erc_row.get('GA', '?')}")
-            elif opp_row and home == opponent:
-                st.markdown(f"**Platz #{opp_row.get('#', '?')}** · {opp_row.get('P', '?')} Punkte · Tore {opp_row.get('GF', '?')}:{opp_row.get('GA', '?')}")
+    CURRICULUM_PATH = DATA_DIR / "academy" / "curriculum.json"
+    SESSIONS_DIR = DATA_DIR / "academy" / "sessions"
+    WIKI_PATH = DATA_DIR / "wiki_terms.json"
     
-    # MATCH INFO
-    st.markdown(
-        f"**📅 {next_game.get('date')}** · "
-        f"**⏱ {next_game.get('time') or '—'}** Uhr · "
-        f"**🏒 Spieltag {next_game.get('matchday') or '—'}**"
-    )
-    st.caption("Hauptrunde · DEL 2025/26")
+    if academy_page == "Curriculum":
+        render_curriculum_page(CURRICULUM_PATH)
     
-    # AWAY TEAM
-    with st.container(border=True):
-        col_a_logo, col_a_info = st.columns([1, 3])
-        with col_a_logo:
-            team_logo(away, width=80)
-        with col_a_info:
-            st.markdown(f"### {away}")
-            if away == ERC_NAME:
-                st.caption("🏠 Heimspiel")
-            else:
-                st.caption("✈️ Auswärts")
-            
-            # Stats inline
-            if erc_row and away == ERC_NAME:
-                st.markdown(f"**Platz #{erc_row.get('#', '?')}** · {erc_row.get('P', '?')} Punkte · Tore {erc_row.get('GF', '?')}:{erc_row.get('GA', '?')}")
-            elif opp_row and away == opponent:
-                st.markdown(f"**Platz #{opp_row.get('#', '?')}** · {opp_row.get('P', '?')} Punkte · Tore {opp_row.get('GF', '?')}:{opp_row.get('GA', '?')}")
-    
-    st.divider()
-    
-    # =====================================
-    # DIREKTER VERGLEICH (kompakt & mobile-friendly)
-    # =====================================
-    if erc_row and opp_row:
-        st.markdown("#### 📊 Direkter Vergleich")
+    elif academy_page == "Session Trainer":
+        # Get DEL teams from TEAM_MAPPING
+        del_teams = sorted(list(TEAM_MAPPING.keys()))
         
-        # Kompakte Darstellung als Tabelle
-        import pandas as pd
-        comparison_data = {
-            "Kategorie": ["Platz", "Punkte", "Tore für", "Tore gegen", "Differenz"],
-            "ERC": [
-                f"#{erc_row.get('#', '?')}",
-                erc_row.get('P', '?'),
-                erc_row.get('GF', '?'),
-                erc_row.get('GA', '?'),
-                erc_row.get('GDIFF', '?')
-            ],
-            opponent: [
-                f"#{opp_row.get('#', '?')}",
-                opp_row.get('P', '?'),
-                opp_row.get('GF', '?'),
-                opp_row.get('GA', '?'),
-                opp_row.get('GDIFF', '?')
-            ]
-        }
-        
-        df_comparison = pd.DataFrame(comparison_data)
-        st.dataframe(df_comparison, use_container_width=True, hide_index=True)
-    
-    st.divider()
-    
-    # =====================================
-    # LAST FIVE / FORMKURVE (aus Recent Games)
-    # =====================================
-    st.subheader("📊 Last Five – Formkurve")
-    st.caption("Letzte 5 Spiele mit Ergebnis. Quelle: Team-Übersichtsseiten.")
-    
-    # Load recent games data
-    erc_short = TEAM_MAPPING.get(ERC_NAME, ERC_NAME.replace(" ", "_"))
-    erc_recent_cache = CACHE_DIR / f"recent_{erc_short.lower()}.json"
-    erc_recent = read_cache(erc_recent_cache)
-    
-    opp_short = TEAM_MAPPING.get(opponent, opponent.replace(" ", "_"))
-    opp_recent_cache = CACHE_DIR / f"recent_{opp_short.lower()}.json"
-    opp_recent = read_cache(opp_recent_cache)
-    
-    # Get last five for both teams (using bridge function)
-    erc_last_five = get_last_five_from_recent(erc_recent.get("data", {}) if erc_recent else {}, max_games=5)
-    opp_last_five = get_last_five_from_recent(opp_recent.get("data", {}) if opp_recent else {}, max_games=5)
-    
-    # Calculate form summaries
-    erc_form = calculate_form_summary(erc_last_five)
-    opp_form = calculate_form_summary(opp_last_five)
-    
-    # Form comparison header
-    if erc_last_five and opp_last_five:
-        st.markdown(
-            f"**Form-Vergleich:** "
-            f"{ERC_NAME}: `{erc_form['formatted']}` ({erc_form['W']}W-{erc_form['OTW']}OW-{erc_form['OTL']}OL-{erc_form['L']}L) "
-            f"| {opponent}: `{opp_form['formatted']}` ({opp_form['W']}W-{opp_form['OTW']}OW-{opp_form['OTL']}OL-{opp_form['L']}L)"
+        render_session_trainer_page(
+            CURRICULUM_PATH,
+            SESSIONS_DIR,
+            user,
+            username,
+            team_logo_callback=team_logo,
+            team_list=del_teams
         )
-    elif erc_last_five or opp_last_five:
-        if erc_last_five:
-            st.markdown(f"**{ERC_NAME}:** `{erc_form['formatted']}` ({erc_form['W']}W-{erc_form['OTW']}OW-{erc_form['OTL']}OL-{erc_form['L']}L)")
-        if opp_last_five:
-            st.markdown(f"**{opponent}:** `{opp_form['formatted']}` ({opp_form['W']}W-{opp_form['OTW']}OW-{opp_form['OTL']}OL-{opp_form['L']}L)")
     
-    # Display in two columns
-    col_erc, col_opp = st.columns(2)
+    elif academy_page == "Historie":
+        render_history_page(
+            CURRICULUM_PATH,
+            SESSIONS_DIR,
+            username,
+            team_logo_callback=team_logo
+        )
     
-    with col_erc:
-        st.markdown(f"**{ERC_NAME}**")
-        if not erc_last_five:
-            st.info("Noch keine Daten. Klicke auf 'DEL-Daten aktualisieren'")
-        else:
-            import pandas as pd
-            df = pd.DataFrame(erc_last_five)
-            # Format for display - adjusted to available columns
-            display_df = df[["date", "score", "result"]].copy()
-            display_df.columns = ["Datum", "Ergebnis", "Typ"]
-            
-            # Optional: Add color coding based on result
-            def style_result(val):
-                if val in ["W", "OTW"]:
-                    return "background-color: #d4edda; color: #155724"
-                elif val in ["L", "OTL"]:
-                    return "background-color: #f8d7da; color: #721c24"
-                return ""
-            
-            st.dataframe(
-                display_df.style.applymap(style_result, subset=["Typ"]),
-                use_container_width=True,
-                hide_index=True,
-                height=220
-            )
+    elif academy_page == "Glossar":
+        render_glossary_page(WIKI_PATH)
     
-    with col_opp:
-        st.markdown(f"**{opponent}**")
-        if not opp_last_five:
-            st.info("Noch keine Daten. Klicke auf 'DEL-Daten aktualisieren'")
-        else:
-            import pandas as pd
-            df = pd.DataFrame(opp_last_five)
-            display_df = df[["date", "score", "result"]].copy()
-            display_df.columns = ["Datum", "Ergebnis", "Typ"]
-            
-            def style_result(val):
-                if val in ["W", "OTW"]:
-                    return "background-color: #d4edda; color: #155724"
-                elif val in ["L", "OTL"]:
-                    return "background-color: #f8d7da; color: #721c24"
-                return ""
-            
-            st.dataframe(
-                display_df.style.applymap(style_result, subset=["Typ"]),
-                use_container_width=True,
-                hide_index=True,
-                height=220
-            )
-    
-    st.divider()
-    st.subheader("Cache-Status")
-    st.write(f"- Tabelle: **{table_wrap.get('updated_at','?')}**")
-    st.write(f"- Spielplan: **{fixtures_wrap.get('updated_at','?')}**")
-    
-    # Check if recent caches exist
-    erc_short = TEAM_MAPPING.get(ERC_NAME, ERC_NAME.replace(" ", "_"))
-    erc_recent_cache = CACHE_DIR / f"recent_{erc_short.lower()}.json"
-    if erc_recent_cache.exists():
-        erc_recent_data = read_cache(erc_recent_cache)
-        if erc_recent_data:
-            st.write(f"- Recent ERC: **{erc_recent_data.get('updated_at','?')}**")
-    
-    opp_short = TEAM_MAPPING.get(opponent, opponent.replace(" ", "_"))
-    opp_recent_cache = CACHE_DIR / f"recent_{opp_short.lower()}.json"
-    if opp_recent_cache.exists():
-        opp_recent_data = read_cache(opp_recent_cache)
-        if opp_recent_data:
-            st.write(f"- Recent {opponent}: **{opp_recent_data.get('updated_at','?')}**")
+    elif academy_page == "Fortschritt":
+        render_progress_page(
+            CURRICULUM_PATH,
+            SESSIONS_DIR,
+            username
+        )
 
+else:
+    # =====================================
+    # MATCHHUB (ORIGINAL CODE)
+    # =====================================
+    
+    table_wrap = read_cache(TABLE_CACHE)
+    fixtures_wrap = read_cache(FIXTURES_CACHE)
 
-with tabs[1]:
-    st.subheader("Pre-Match Check")
-    st.caption("Skala 1–6. 1 = low, 6 = high. Kurz halten, damit er's macht.")
+    if not table_wrap or not fixtures_wrap:
+        st.warning("Cache ist leer. Links im Sidebar auf **DEL-Daten aktualisieren** klicken.")
+        st.stop()
 
-    # Boomer / Nerd Mode Toggle
-    mode = st.toggle("Erweiterter Modus (Taktik & Analyse)", value=False)
-    mode_value = "nerd" if mode else "simple"
+    table = table_wrap["data"]
+    fixtures = fixtures_wrap["data"]
 
-    # Load wiki for inline hints
-    wiki_path = DATA_DIR / "wiki_terms.json"
-    wiki_data = load_json(wiki_path) if wiki_path.exists() else {}
+    next_game = pick_next_erc_game(fixtures)
+    if not next_game:
+        st.error("Kein nächstes ERC-Spiel im Spielplan gefunden (oder Parser greift nicht).")
+        st.stop()
 
-    with st.form("prematch"):
-        # 1. Pre-Match Mood
+    home = next_game["home"]
+    away = next_game["away"]
+    opponent = away if home == ERC_NAME else home
+
+    erc_row = find_team_row(table, ERC_NAME)
+    opp_row = find_team_row(table, opponent)
+
+    tabs = st.tabs(["Heute", "Pre-Match Check", "Beobachtung", "Historie", "Wiki"])
+
+    with tabs[0]:
+        # =====================================
+        # MATCH HEADER mit Logos & Stats
+        # =====================================
+        st.subheader("Nächstes Spiel")
+    
+        # HOME TEAM
         with st.container(border=True):
-            st.markdown("#### 📊 Pre-Match Mood")
-            c1, c2, c3, c4 = st.columns(4)
-            with c1:
-                nervous = st.slider("Nervös?", 1, 6, 3)
-            with c2:
-                confidence = st.slider("Vertrauen ins Team?", 1, 6, 4)
-            with c3:
-                expectation = st.slider("Erwartung (wie gut wird's)?", 1, 6, 4)
-            with c4:
-                mood = st.slider("Grundstimmung?", 1, 6, 4)
-
-        # 2. Tipp & Erwartung
-        with st.container(border=True):
-            st.markdown("#### 🎯 Tipp & Erwartung")
-            tip = st.radio("Tipp", ["ERC Sieg (reg.)", "ERC Sieg (OT/SO)", "ERC verliert (OT/SO)", "ERC verliert (reg.)"], horizontal=False)
-
-        # 3. Beobachtungs-Fokus (nur Nerd-Modus)
-        focus_tags = []
-        if mode:
-            with st.container(border=True):
-                st.markdown("#### 🔍 Beobachtungs-Fokus")
-                # Lade Optionen dynamisch aus Wiki
-                focus_options = sorted(wiki_data.keys()) if wiki_data else []
-                if not focus_options:
-                    st.info("Wiki-Begriffe noch nicht verfügbar. Erstelle data/wiki_terms.json")
+            col_h_logo, col_h_info = st.columns([1, 3])
+            with col_h_logo:
+                team_logo(home, width=80)
+            with col_h_info:
+                st.markdown(f"### {home}")
+                if home == ERC_NAME:
+                    st.caption("🏠 Heimspiel")
                 else:
-                    focus_tags = st.multiselect(
-                        "Worauf achtest du heute?",
-                        focus_options
-                    )
-                
-                # Show wiki hints for selected tags
-                if focus_tags and wiki_data:
-                    st.caption("💡 Wiki-Hinweise zu deinen Fokus-Punkten:")
-                    for tag in focus_tags:
-                        if tag in wiki_data:
-                            term = wiki_data[tag]
-                            with st.expander(f"📖 {tag}", expanded=False):
-                                st.write(term.get("short", ""))
-
-        # 4. Notizen
+                    st.caption("✈️ Auswärts")
+            
+                # Stats inline
+                if erc_row and home == ERC_NAME:
+                    st.markdown(f"**Platz #{erc_row.get('#', '?')}** · {erc_row.get('P', '?')} Punkte · Tore {erc_row.get('GF', '?')}:{erc_row.get('GA', '?')}")
+                elif opp_row and home == opponent:
+                    st.markdown(f"**Platz #{opp_row.get('#', '?')}** · {opp_row.get('P', '?')} Punkte · Tore {opp_row.get('GF', '?')}:{opp_row.get('GA', '?')}")
+    
+        # MATCH INFO
+        st.markdown(
+            f"**📅 {next_game.get('date')}** · "
+            f"**⏱ {next_game.get('time') or '—'}** Uhr · "
+            f"**🏒 Spieltag {next_game.get('matchday') or '—'}**"
+        )
+        st.caption("Hauptrunde · DEL 2025/26")
+    
+        # AWAY TEAM
         with st.container(border=True):
-            st.markdown("#### 📝 Notizen")
-            one_liner = st.text_input("One-Liner (optional)", placeholder="z.B. Heute wird's eng, aber machbar.")
+            col_a_logo, col_a_info = st.columns([1, 3])
+            with col_a_logo:
+                team_logo(away, width=80)
+            with col_a_info:
+                st.markdown(f"### {away}")
+                if away == ERC_NAME:
+                    st.caption("🏠 Heimspiel")
+                else:
+                    st.caption("✈️ Auswärts")
             
-            if mode:
-                focus_obs = st.text_input("Beobachtung heute (optional)", placeholder="z.B. Center: middle support / Dreiecke reißen auf")
-            else:
-                focus_obs = ""
-
-        submitted = st.form_submit_button("Absenden", type="primary")
-
-    if submitted:
-        payload = {
-            "user": user,
-            "season": "2025-26",
-            "mode": mode_value,
-            "game": {
-                "date": next_game.get("date"),
-                "time": next_game.get("time"),
-                "matchday": next_game.get("matchday"),
-                "home": home,
-                "away": away,
-                "erc": ERC_NAME,
-            },
-            "ratings": {
-                "nervous": nervous,
-                "confidence_team": confidence,
-                "expectation": expectation,
-                "mood": mood,
-            },
-            "tip": tip,
-            "focus_tags": focus_tags,
-            "notes": {
-                "one_liner": one_liner.strip(),
-                "focus_observation": focus_obs.strip(),
-            },
-        }
-        path = save_submission(SUBMISSIONS_DIR, payload)
-        st.success(f"Gespeichert: {path.name}")
-
-
-with tabs[2]:
-    # =====================================
-    # BEOBACHTUNG: Center & Support-Dreiecke
-    # =====================================
-    st.subheader("🧠 Beobachtung: Center & Support-Dreiecke")
-    st.caption(f"Fokus heute: **Center-Position & Dreiecke** • User: **{username}**")
+                # Stats inline
+                if erc_row and away == ERC_NAME:
+                    st.markdown(f"**Platz #{erc_row.get('#', '?')}** · {erc_row.get('P', '?')} Punkte · Tore {erc_row.get('GF', '?')}:{erc_row.get('GA', '?')}")
+                elif opp_row and away == opponent:
+                    st.markdown(f"**Platz #{opp_row.get('#', '?')}** · {opp_row.get('P', '?')} Punkte · Tore {opp_row.get('GF', '?')}:{opp_row.get('GA', '?')}")
     
-    # Game Info (auto)
-    st.markdown(f"**{home} vs {away}** • {next_game.get('date')} • Spieltag {next_game.get('matchday')}")
-    
-    st.divider()
-    
-    # Period Selection
-    period = st.radio("📋 Drittel", [1, 2, 3], horizontal=True, key="obs_period")
-    
-    st.info("💡 **Drittelpause-Check** – max. 60-90 Sekunden zwischen den Dritteln")
-    
-    with st.form(f"observation_period_{period}"):
-        # =====================================
-        # FRAGE A1: Center-Position in der DZ
-        # =====================================
-        st.markdown("### Frage 1: Center-Position in der DZ")
-        center_pos = st.radio(
-            "Wo war der Center defensiv meistens positioniert?",
-            ["Low – tief vor dem Slot", "Middle – Slot / Hashmarks", "High – oberhalb der Kreise / Richtung Blaue"],
-            key=f"center_pos_{period}"
-        )
-        st.caption("ℹ️ *Der Center ist der Pivot zwischen Slot-Schutz und erstem Outlet-Pass.*")
-        
         st.divider()
-        
-        # =====================================
-        # FRAGE A2: Dreiecke & Anspielstationen
-        # =====================================
-        st.markdown("### Frage 2: Dreiecke & Anspielstationen")
-        triangles = st.slider(
-            "Wie oft gab es saubere 3er-Anspielstationen (Dreiecke)?",
-            min_value=1,
-            max_value=5,
-            value=3,
-            help="1 = fast nie | 3 = phasenweise | 5 = fast immer",
-            key=f"triangles_{period}"
-        )
-        st.caption("ℹ️ *Stabile Dreiecke = weniger Blind Clears, mehr Kontrolle.*")
-        
-        st.divider()
-        
-        # =====================================
-        # FRAGE A3: Breakout-Qualität
-        # =====================================
-        st.markdown("### Frage 3: Breakout-Qualität")
-        breakout = st.radio(
-            "Wie kam ERC meist aus der eigenen Zone?",
-            ["Sauber – kontrollierter Aufbau", "Gemischt – mal Kontrolle, mal Chaos", "Chaotisch – Blind Clears, Icing-Gefahr"],
-            key=f"breakout_{period}"
-        )
-        st.caption("ℹ️ *Breakout-Probleme zeigen sich zuerst beim Center-Support.*")
-        
-        st.divider()
-        
-        # =====================================
-        # OPTIONAL: Notiz (nur für christoph)
-        # =====================================
-        note = ""
-        if username == "christoph":
-            st.markdown("### Optional: Kurznotiz")
-            note = st.text_input(
-                "Wodurch reißen die Dreiecke? (max. 120 Zeichen)",
-                max_chars=120,
-                key=f"note_{period}"
-            )
-        
-        # Submit
-        submitted = st.form_submit_button("✅ Check-in speichern", type="primary")
     
-    if submitted:
-        # Parse answers
-        center_parsed = center_pos.split(" – ")[0].lower()
-        breakout_parsed = breakout.split(" – ")[0].lower()
+        # =====================================
+        # DIREKTER VERGLEICH (kompakt & mobile-friendly)
+        # =====================================
+        if erc_row and opp_row:
+            st.markdown("#### 📊 Direkter Vergleich")
         
-        # Build observation object
-        observation = {
-            "user": username,
-            "game": {
-                "date": next_game.get("date"),
-                "home": home,
-                "away": away,
-                "matchday": next_game.get("matchday")
-            },
-            "focus": "CENTER_TRIANGLES",
-            "period": period,
-            "timestamp": datetime.now().isoformat(),
-            "answers": {
-                "center_position": center_parsed,
-                "triangle_rating": triangles,
-                "breakout_quality": breakout_parsed,
-                "note": note.strip()
+            # Kompakte Darstellung als Tabelle
+            import pandas as pd
+            comparison_data = {
+                "Kategorie": ["Platz", "Punkte", "Tore für", "Tore gegen", "Differenz"],
+                "ERC": [
+                    f"#{erc_row.get('#', '?')}",
+                    erc_row.get('P', '?'),
+                    erc_row.get('GF', '?'),
+                    erc_row.get('GA', '?'),
+                    erc_row.get('GDIFF', '?')
+                ],
+                opponent: [
+                    f"#{opp_row.get('#', '?')}",
+                    opp_row.get('P', '?'),
+                    opp_row.get('GF', '?'),
+                    opp_row.get('GA', '?'),
+                    opp_row.get('GDIFF', '?')
+                ]
             }
-        }
         
-        # Save to combined JSON
-        from pathlib import Path
-        import json
-        obs_dir = DATA_DIR / "observations"
-        filepath = save_observation(obs_dir, observation)
-        
-        st.success(f"✅ Drittel {period} gespeichert!")
-        
-        # =====================================
-        # SOFORT-FEEDBACK: Automatische Auswertung
-        # =====================================
+            df_comparison = pd.DataFrame(comparison_data)
+            st.dataframe(df_comparison, use_container_width=True, hide_index=True)
+    
         st.divider()
-        st.markdown("### 🔎 Automatische Auswertung")
-        
-        # Analyse-Logik
-        analysis = []
-        learning_task = ""
-        
-        if center_parsed == "high" and triangles <= 2:
-            analysis.append("**ERC verliert Struktur zwischen Slot und Blaue** – Dreiecke reißen früh.")
-            learning_task = "Achte darauf, ob der Center früher absinkt, sobald der Gegner Druck aufbaut."
-        elif center_parsed == "low" and breakout_parsed == "chaotisch":
-            analysis.append("**Center steht zu tief** – fehlende Outlet-Option führt zu Blind Clears.")
-            learning_task = "Beobachte, ob der Center rechtzeitig nach oben kommt, um den ersten Pass anzubieten."
-        elif triangles >= 4 and breakout_parsed == "sauber":
-            analysis.append("**Starke Struktur!** Dreiecke stabil, Breakouts kontrolliert.")
-            learning_task = "Achte darauf, wie lange diese Struktur unter Druck hält."
-        elif breakout_parsed == "gemischt":
-            analysis.append("**Inkonsistenz** – mal funktioniert's, mal nicht.")
-            learning_task = "Versuche zu erkennen, wann die Dreiecke zusammenbrechen (Forechecking-Druck? Tempo?)."
-        else:
-            analysis.append("**Solide Basisarbeit** – Center und Dreiecke arbeiten zusammen.")
-            learning_task = "Beobachte, wie sich das unter zunehmendem Druck entwickelt."
-        
-        # Display
-        for a in analysis:
-            st.markdown(a)
-        
+    
+        # =====================================
+        # LAST FIVE / FORMKURVE (aus Recent Games)
+        # =====================================
+        st.subheader("📊 Last Five – Formkurve")
+        st.caption("Letzte 5 Spiele mit Ergebnis. Quelle: Team-Übersichtsseiten.")
+    
+        # Load recent games data
+        erc_short = TEAM_MAPPING.get(ERC_NAME, ERC_NAME.replace(" ", "_"))
+        erc_recent_cache = CACHE_DIR / f"recent_{erc_short.lower()}.json"
+        erc_recent = read_cache(erc_recent_cache)
+    
+        opp_short = TEAM_MAPPING.get(opponent, opponent.replace(" ", "_"))
+        opp_recent_cache = CACHE_DIR / f"recent_{opp_short.lower()}.json"
+        opp_recent = read_cache(opp_recent_cache)
+    
+        # Get last five for both teams (using bridge function)
+        erc_last_five = get_last_five_from_recent(erc_recent.get("data", {}) if erc_recent else {}, max_games=5)
+        opp_last_five = get_last_five_from_recent(opp_recent.get("data", {}) if opp_recent else {}, max_games=5)
+    
+        # Calculate form summaries
+        erc_form = calculate_form_summary(erc_last_five)
+        opp_form = calculate_form_summary(opp_last_five)
+    
+        # Form comparison header
+        if erc_last_five and opp_last_five:
+            st.markdown(
+                f"**Form-Vergleich:** "
+                f"{ERC_NAME}: `{erc_form['formatted']}` ({erc_form['W']}W-{erc_form['OTW']}OW-{erc_form['OTL']}OL-{erc_form['L']}L) "
+                f"| {opponent}: `{opp_form['formatted']}` ({opp_form['W']}W-{opp_form['OTW']}OW-{opp_form['OTL']}OL-{opp_form['L']}L)"
+            )
+        elif erc_last_five or opp_last_five:
+            if erc_last_five:
+                st.markdown(f"**{ERC_NAME}:** `{erc_form['formatted']}` ({erc_form['W']}W-{erc_form['OTW']}OW-{erc_form['OTL']}OL-{erc_form['L']}L)")
+            if opp_last_five:
+                st.markdown(f"**{opponent}:** `{opp_form['formatted']}` ({opp_form['W']}W-{opp_form['OTW']}OW-{opp_form['OTL']}OL-{opp_form['L']}L)")
+    
+        # Display in two columns
+        col_erc, col_opp = st.columns(2)
+    
+        with col_erc:
+            st.markdown(f"**{ERC_NAME}**")
+            if not erc_last_five:
+                st.info("Noch keine Daten. Klicke auf 'DEL-Daten aktualisieren'")
+            else:
+                import pandas as pd
+                df = pd.DataFrame(erc_last_five)
+                # Format for display - adjusted to available columns
+                display_df = df[["date", "score", "result"]].copy()
+                display_df.columns = ["Datum", "Ergebnis", "Typ"]
+            
+                # Optional: Add color coding based on result
+                def style_result(val):
+                    if val in ["W", "OTW"]:
+                        return "background-color: #d4edda; color: #155724"
+                    elif val in ["L", "OTL"]:
+                        return "background-color: #f8d7da; color: #721c24"
+                    return ""
+            
+                st.dataframe(
+                    display_df.style.applymap(style_result, subset=["Typ"]),
+                    use_container_width=True,
+                    hide_index=True,
+                    height=220
+                )
+    
+        with col_opp:
+            st.markdown(f"**{opponent}**")
+            if not opp_last_five:
+                st.info("Noch keine Daten. Klicke auf 'DEL-Daten aktualisieren'")
+            else:
+                import pandas as pd
+                df = pd.DataFrame(opp_last_five)
+                display_df = df[["date", "score", "result"]].copy()
+                display_df.columns = ["Datum", "Ergebnis", "Typ"]
+            
+                def style_result(val):
+                    if val in ["W", "OTW"]:
+                        return "background-color: #d4edda; color: #155724"
+                    elif val in ["L", "OTL"]:
+                        return "background-color: #f8d7da; color: #721c24"
+                    return ""
+            
+                st.dataframe(
+                    display_df.style.applymap(style_result, subset=["Typ"]),
+                    use_container_width=True,
+                    hide_index=True,
+                    height=220
+                )
+    
         st.divider()
-        st.markdown("### 🎯 Lernauftrag für nächstes Drittel")
-        st.info(learning_task)
+        st.subheader("Cache-Status")
+        st.write(f"- Tabelle: **{table_wrap.get('updated_at','?')}**")
+        st.write(f"- Spielplan: **{fixtures_wrap.get('updated_at','?')}**")
+    
+        # Check if recent caches exist
+        erc_short = TEAM_MAPPING.get(ERC_NAME, ERC_NAME.replace(" ", "_"))
+        erc_recent_cache = CACHE_DIR / f"recent_{erc_short.lower()}.json"
+        if erc_recent_cache.exists():
+            erc_recent_data = read_cache(erc_recent_cache)
+            if erc_recent_data:
+                st.write(f"- Recent ERC: **{erc_recent_data.get('updated_at','?')}**")
+    
+        opp_short = TEAM_MAPPING.get(opponent, opponent.replace(" ", "_"))
+        opp_recent_cache = CACHE_DIR / f"recent_{opp_short.lower()}.json"
+        if opp_recent_cache.exists():
+            opp_recent_data = read_cache(opp_recent_cache)
+            if opp_recent_data:
+                st.write(f"- Recent {opponent}: **{opp_recent_data.get('updated_at','?')}**")
 
 
-with tabs[3]:
-    # =====================================
-    # HISTORIE: Schöne Ansicht statt JSON-Dump
-    # =====================================
-    st.subheader("📚 Historie")
-    st.caption("Einträge durchsuchen und anzeigen lassen.")
-    
-    # Load data
-    submissions = load_all_submissions(SUBMISSIONS_DIR)
-    observations = load_all_observations(DATA_DIR / "observations")
-    
-    if not submissions and not observations:
-        st.info("Noch keine Einträge vorhanden.")
-        st.stop()
-    
-    # Build game options
-    # Use a composite key (type + game_key) so Pre-Match and Beobachtung for
-    # dasselbe Spiel nicht kollidieren. Vorher wurde Beobachtung vom gleichen
-    # Spiel durch das Pre-Match-Entry überschrieben und tauchte im Dropdown
-    # nicht auf.
-    game_options = {}
+    with tabs[1]:
+        st.subheader("Pre-Match Check")
+        st.caption("Skala 1–6. 1 = low, 6 = high. Kurz halten, damit er's macht.")
 
-    # Add Pre-Match games
-    for sub in submissions:
-        game_key = get_game_key(sub, "Pre-Match")
-        composite_key = f"Pre-Match__{game_key}"
-        if composite_key not in game_options:
-            game_options[composite_key] = {"type": "Pre-Match", "game_key": game_key, "entries": []}
-        game_options[composite_key]["entries"].append(sub)
+        # Boomer / Nerd Mode Toggle
+        mode = st.toggle("Erweiterter Modus (Taktik & Analyse)", value=False)
+        mode_value = "nerd" if mode else "simple"
 
-    # Add Beobachtung games (now each entry contains all periods)
-    for obs in observations:
-        game_key = get_game_key(obs, "Beobachtung")
-        composite_key = f"Beobachtung__{game_key}"
-        if composite_key not in game_options:
-            game_options[composite_key] = {"type": "Beobachtung", "game_key": game_key, "entries": []}
-        game_options[composite_key]["entries"].append(obs)
-    
-    # Dropdowns
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        user_options = ["alle", "martin", "christoph"]
-        select_user = st.selectbox("👤 User", user_options, index=0)
-    
-    with col2:
-        type_options = ["Pre-Match", "Beobachtung"]
-        select_type = st.selectbox("📋 Typ", type_options, index=0)
-    
-    with col3:
-        # Filter games by type
-        available_games = [k for k, v in game_options.items() if v["type"] == select_type]
-        if not available_games:
-            st.warning(f"Keine {select_type} Einträge gefunden.")
-            st.stop()
-        
-        game_display_options = [format_game_display(game_options[k]["game_key"]) for k in available_games]
-        select_game_idx = st.selectbox("🏒 Spiel", range(len(game_display_options)), format_func=lambda i: game_display_options[i])
-        selected_game_key = available_games[select_game_idx]
-    
-    # Get entries for selected game
-    game_data = game_options[selected_game_key]
-    entries = game_data["entries"]
-    
-    # Filter by user if not "alle"
-    if select_user != "alle":
-        entries = [e for e in entries if e.get("user") == select_user]
-    
-    if not entries:
-        st.warning(f"Keine Einträge für {select_user} in diesem Spiel gefunden.")
-        st.stop()
-    
-    # Since we keep only latest per user+game+type, there should be only one entry
-    selected_entry = entries[0]
-    
-    st.divider()
-    
-    # Display the entry beautifully
-    if select_type == "Pre-Match":
-        display_pre_match_entry(selected_entry)
-    else:
-        display_observation_entry(selected_entry)
+        # Load wiki for inline hints
+        wiki_path = DATA_DIR / "wiki_terms.json"
+        wiki_data = load_json(wiki_path) if wiki_path.exists() else {}
 
+        with st.form("prematch"):
+            # 1. Pre-Match Mood
+            with st.container(border=True):
+                st.markdown("#### 📊 Pre-Match Mood")
+                c1, c2, c3, c4 = st.columns(4)
+                with c1:
+                    nervous = st.slider("Nervös?", 1, 6, 3)
+                with c2:
+                    confidence = st.slider("Vertrauen ins Team?", 1, 6, 4)
+                with c3:
+                    expectation = st.slider("Erwartung (wie gut wird's)?", 1, 6, 4)
+                with c4:
+                    mood = st.slider("Grundstimmung?", 1, 6, 4)
 
-with tabs[4]:
-    # =====================================
-    # WIKI: Taktik-Glossar
-    # =====================================
-    st.subheader("📚 Taktik-Wiki")
-    st.caption("Begriffe und Konzepte aus dem Taktik-Seminar. Kompakt und durchsuchbar.")
-    
-    wiki_path = DATA_DIR / "wiki_terms.json"
-    
-    if not wiki_path.exists():
-        st.warning("Wiki noch nicht angelegt. Erstelle `data/wiki_terms.json`")
-    else:
-        wiki_data = load_json(wiki_path)
-        
-        if not wiki_data:
-            st.info("Wiki ist leer.")
-        else:
-            # Search field
-            search = st.text_input("🔍 Begriff suchen", placeholder="z.B. Dreieck, Center, Forecheck...")
-            
-            # Filter terms
-            terms = wiki_data.keys()
-            if search:
-                terms = [t for t in terms if search.lower() in t.lower()]
-            else:
-                terms = list(terms)
-            
-            if not terms:
-                st.info("Keine Treffer.")
-            else:
-                st.caption(f"{len(terms)} Begriff(e) gefunden")
+            # 2. Tipp & Erwartung
+            with st.container(border=True):
+                st.markdown("#### 🎯 Tipp & Erwartung")
+                tip = st.radio("Tipp", ["ERC Sieg (reg.)", "ERC Sieg (OT/SO)", "ERC verliert (OT/SO)", "ERC verliert (reg.)"], horizontal=False)
+
+            # 3. Beobachtungs-Fokus (nur Nerd-Modus)
+            focus_tags = []
+            if mode:
+                with st.container(border=True):
+                    st.markdown("#### 🔍 Beobachtungs-Fokus")
+                    # Lade Optionen dynamisch aus Wiki
+                    focus_options = sorted(wiki_data.keys()) if wiki_data else []
+                    if not focus_options:
+                        st.info("Wiki-Begriffe noch nicht verfügbar. Erstelle data/wiki_terms.json")
+                    else:
+                        focus_tags = st.multiselect(
+                            "Worauf achtest du heute?",
+                            focus_options
+                        )
                 
-                # Display terms
-                for term_name in sorted(terms):
-                    term = wiki_data[term_name]
-                    with st.expander(f"📖 {term_name}", expanded=False):
-                        st.markdown(f"**{term.get('short', '')}**")
+                    # Show wiki hints for selected tags
+                    if focus_tags and wiki_data:
+                        st.caption("💡 Wiki-Hinweise zu deinen Fokus-Punkten:")
+                        for tag in focus_tags:
+                            if tag in wiki_data:
+                                term = wiki_data[tag]
+                                with st.expander(f"📖 {tag}", expanded=False):
+                                    st.write(term.get("short", ""))
+
+            # 4. Notizen
+            with st.container(border=True):
+                st.markdown("#### 📝 Notizen")
+                one_liner = st.text_input("One-Liner (optional)", placeholder="z.B. Heute wird's eng, aber machbar.")
+            
+                if mode:
+                    focus_obs = st.text_input("Beobachtung heute (optional)", placeholder="z.B. Center: middle support / Dreiecke reißen auf")
+                else:
+                    focus_obs = ""
+
+            submitted = st.form_submit_button("Absenden", type="primary")
+
+        if submitted:
+            payload = {
+                "user": user,
+                "season": "2025-26",
+                "mode": mode_value,
+                "game": {
+                    "date": next_game.get("date"),
+                    "time": next_game.get("time"),
+                    "matchday": next_game.get("matchday"),
+                    "home": home,
+                    "away": away,
+                    "erc": ERC_NAME,
+                },
+                "ratings": {
+                    "nervous": nervous,
+                    "confidence_team": confidence,
+                    "expectation": expectation,
+                    "mood": mood,
+                },
+                "tip": tip,
+                "focus_tags": focus_tags,
+                "notes": {
+                    "one_liner": one_liner.strip(),
+                    "focus_observation": focus_obs.strip(),
+                },
+            }
+            path = save_submission(SUBMISSIONS_DIR, payload)
+            st.success(f"Gespeichert: {path.name}")
+
+
+    with tabs[2]:
+        # =====================================
+        # BEOBACHTUNG: Center & Support-Dreiecke
+        # =====================================
+        st.subheader("🧠 Beobachtung: Center & Support-Dreiecke")
+        st.caption(f"Fokus heute: **Center-Position & Dreiecke** • User: **{username}**")
+    
+        # Game Info (auto)
+        st.markdown(f"**{home} vs {away}** • {next_game.get('date')} • Spieltag {next_game.get('matchday')}")
+    
+        st.divider()
+    
+        # Period Selection
+        period = st.radio("📋 Drittel", [1, 2, 3], horizontal=True, key="obs_period")
+    
+        st.info("💡 **Drittelpause-Check** – max. 60-90 Sekunden zwischen den Dritteln")
+    
+        with st.form(f"observation_period_{period}"):
+            # =====================================
+            # FRAGE A1: Center-Position in der DZ
+            # =====================================
+            st.markdown("### Frage 1: Center-Position in der DZ")
+            center_pos = st.radio(
+                "Wo war der Center defensiv meistens positioniert?",
+                ["Low – tief vor dem Slot", "Middle – Slot / Hashmarks", "High – oberhalb der Kreise / Richtung Blaue"],
+                key=f"center_pos_{period}"
+            )
+            st.caption("ℹ️ *Der Center ist der Pivot zwischen Slot-Schutz und erstem Outlet-Pass.*")
+        
+            st.divider()
+        
+            # =====================================
+            # FRAGE A2: Dreiecke & Anspielstationen
+            # =====================================
+            st.markdown("### Frage 2: Dreiecke & Anspielstationen")
+            triangles = st.slider(
+                "Wie oft gab es saubere 3er-Anspielstationen (Dreiecke)?",
+                min_value=1,
+                max_value=5,
+                value=3,
+                help="1 = fast nie | 3 = phasenweise | 5 = fast immer",
+                key=f"triangles_{period}"
+            )
+            st.caption("ℹ️ *Stabile Dreiecke = weniger Blind Clears, mehr Kontrolle.*")
+        
+            st.divider()
+        
+            # =====================================
+            # FRAGE A3: Breakout-Qualität
+            # =====================================
+            st.markdown("### Frage 3: Breakout-Qualität")
+            breakout = st.radio(
+                "Wie kam ERC meist aus der eigenen Zone?",
+                ["Sauber – kontrollierter Aufbau", "Gemischt – mal Kontrolle, mal Chaos", "Chaotisch – Blind Clears, Icing-Gefahr"],
+                key=f"breakout_{period}"
+            )
+            st.caption("ℹ️ *Breakout-Probleme zeigen sich zuerst beim Center-Support.*")
+        
+            st.divider()
+        
+            # =====================================
+            # OPTIONAL: Notiz (nur für christoph)
+            # =====================================
+            note = ""
+            if username == "christoph":
+                st.markdown("### Optional: Kurznotiz")
+                note = st.text_input(
+                    "Wodurch reißen die Dreiecke? (max. 120 Zeichen)",
+                    max_chars=120,
+                    key=f"note_{period}"
+                )
+        
+            # Submit
+            submitted = st.form_submit_button("✅ Check-in speichern", type="primary")
+    
+        if submitted:
+            # Parse answers
+            center_parsed = center_pos.split(" – ")[0].lower()
+            breakout_parsed = breakout.split(" – ")[0].lower()
+        
+            # Build observation object
+            observation = {
+                "user": username,
+                "game": {
+                    "date": next_game.get("date"),
+                    "home": home,
+                    "away": away,
+                    "matchday": next_game.get("matchday")
+                },
+                "focus": "CENTER_TRIANGLES",
+                "period": period,
+                "timestamp": datetime.now().isoformat(),
+                "answers": {
+                    "center_position": center_parsed,
+                    "triangle_rating": triangles,
+                    "breakout_quality": breakout_parsed,
+                    "note": note.strip()
+                }
+            }
+        
+            # Save to combined JSON
+            from pathlib import Path
+            import json
+            obs_dir = DATA_DIR / "observations"
+            filepath = save_observation(obs_dir, observation)
+        
+            st.success(f"✅ Drittel {period} gespeichert!")
+        
+            # =====================================
+            # SOFORT-FEEDBACK: Automatische Auswertung
+            # =====================================
+            st.divider()
+            st.markdown("### 🔎 Automatische Auswertung")
+        
+            # Analyse-Logik
+            analysis = []
+            learning_task = ""
+        
+            if center_parsed == "high" and triangles <= 2:
+                analysis.append("**ERC verliert Struktur zwischen Slot und Blaue** – Dreiecke reißen früh.")
+                learning_task = "Achte darauf, ob der Center früher absinkt, sobald der Gegner Druck aufbaut."
+            elif center_parsed == "low" and breakout_parsed == "chaotisch":
+                analysis.append("**Center steht zu tief** – fehlende Outlet-Option führt zu Blind Clears.")
+                learning_task = "Beobachte, ob der Center rechtzeitig nach oben kommt, um den ersten Pass anzubieten."
+            elif triangles >= 4 and breakout_parsed == "sauber":
+                analysis.append("**Starke Struktur!** Dreiecke stabil, Breakouts kontrolliert.")
+                learning_task = "Achte darauf, wie lange diese Struktur unter Druck hält."
+            elif breakout_parsed == "gemischt":
+                analysis.append("**Inkonsistenz** – mal funktioniert's, mal nicht.")
+                learning_task = "Versuche zu erkennen, wann die Dreiecke zusammenbrechen (Forechecking-Druck? Tempo?)."
+            else:
+                analysis.append("**Solide Basisarbeit** – Center und Dreiecke arbeiten zusammen.")
+                learning_task = "Beobachte, wie sich das unter zunehmendem Druck entwickelt."
+        
+            # Display
+            for a in analysis:
+                st.markdown(a)
+        
+            st.divider()
+            st.markdown("### 🎯 Lernauftrag für nächstes Drittel")
+            st.info(learning_task)
+
+
+    with tabs[3]:
+        # =====================================
+        # HISTORIE: Schöne Ansicht statt JSON-Dump
+        # =====================================
+        st.subheader("📚 Historie")
+        st.caption("Einträge durchsuchen und anzeigen lassen.")
+    
+        # Load data
+        submissions = load_all_submissions(SUBMISSIONS_DIR)
+        observations = load_all_observations(DATA_DIR / "observations")
+    
+        if not submissions and not observations:
+            st.info("Noch keine Einträge vorhanden.")
+            st.stop()
+    
+        # Build game options
+        # Use a composite key (type + game_key) so Pre-Match and Beobachtung for
+        # dasselbe Spiel nicht kollidieren. Vorher wurde Beobachtung vom gleichen
+        # Spiel durch das Pre-Match-Entry überschrieben und tauchte im Dropdown
+        # nicht auf.
+        game_options = {}
+
+        # Add Pre-Match games
+        for sub in submissions:
+            game_key = get_game_key(sub, "Pre-Match")
+            composite_key = f"Pre-Match__{game_key}"
+            if composite_key not in game_options:
+                game_options[composite_key] = {"type": "Pre-Match", "game_key": game_key, "entries": []}
+            game_options[composite_key]["entries"].append(sub)
+
+        # Add Beobachtung games (now each entry contains all periods)
+        for obs in observations:
+            game_key = get_game_key(obs, "Beobachtung")
+            composite_key = f"Beobachtung__{game_key}"
+            if composite_key not in game_options:
+                game_options[composite_key] = {"type": "Beobachtung", "game_key": game_key, "entries": []}
+            game_options[composite_key]["entries"].append(obs)
+    
+        # Dropdowns
+        col1, col2, col3 = st.columns(3)
+    
+        with col1:
+            user_options = ["alle", "martin", "christoph"]
+            select_user = st.selectbox("👤 User", user_options, index=0)
+    
+        with col2:
+            type_options = ["Pre-Match", "Beobachtung"]
+            select_type = st.selectbox("📋 Typ", type_options, index=0)
+    
+        with col3:
+            # Filter games by type
+            available_games = [k for k, v in game_options.items() if v["type"] == select_type]
+            if not available_games:
+                st.warning(f"Keine {select_type} Einträge gefunden.")
+                st.stop()
+        
+            game_display_options = [format_game_display(game_options[k]["game_key"]) for k in available_games]
+            select_game_idx = st.selectbox("🏒 Spiel", range(len(game_display_options)), format_func=lambda i: game_display_options[i])
+            selected_game_key = available_games[select_game_idx]
+    
+        # Get entries for selected game
+        game_data = game_options[selected_game_key]
+        entries = game_data["entries"]
+    
+        # Filter by user if not "alle"
+        if select_user != "alle":
+            entries = [e for e in entries if e.get("user") == select_user]
+    
+        if not entries:
+            st.warning(f"Keine Einträge für {select_user} in diesem Spiel gefunden.")
+            st.stop()
+    
+        # Since we keep only latest per user+game+type, there should be only one entry
+        selected_entry = entries[0]
+    
+        st.divider()
+    
+        # Display the entry beautifully
+        if select_type == "Pre-Match":
+            display_pre_match_entry(selected_entry)
+        else:
+            display_observation_entry(selected_entry)
+
+
+    with tabs[4]:
+        # =====================================
+        # WIKI: Taktik-Glossar
+        # =====================================
+        st.subheader("📚 Taktik-Wiki")
+        st.caption("Begriffe und Konzepte aus dem Taktik-Seminar. Kompakt und durchsuchbar.")
+    
+        wiki_path = DATA_DIR / "wiki_terms.json"
+    
+        if not wiki_path.exists():
+            st.warning("Wiki noch nicht angelegt. Erstelle `data/wiki_terms.json`")
+        else:
+            wiki_data = load_json(wiki_path)
+        
+            if not wiki_data:
+                st.info("Wiki ist leer.")
+            else:
+                # Search field
+                search = st.text_input("🔍 Begriff suchen", placeholder="z.B. Dreieck, Center, Forecheck...")
+            
+                # Filter terms
+                terms = wiki_data.keys()
+                if search:
+                    terms = [t for t in terms if search.lower() in t.lower()]
+                else:
+                    terms = list(terms)
+            
+                if not terms:
+                    st.info("Keine Treffer.")
+                else:
+                    st.caption(f"{len(terms)} Begriff(e) gefunden")
+                
+                    # Display terms
+                    for term_name in sorted(terms):
+                        term = wiki_data[term_name]
+                        with st.expander(f"📖 {term_name}", expanded=False):
+                            st.markdown(f"**{term.get('short', '')}**")
                         
-                        if "details" in term:
-                            st.markdown(term["details"])
+                            if "details" in term:
+                                st.markdown(term["details"])
                         
-                        if "watch" in term and term["watch"]:
-                            st.markdown("**Worauf achten:**")
-                            for item in term["watch"]:
-                                st.markdown(f"- {item}")
+                            if "watch" in term and term["watch"]:
+                                st.markdown("**Worauf achten:**")
+                                for item in term["watch"]:
+                                    st.markdown(f"- {item}")

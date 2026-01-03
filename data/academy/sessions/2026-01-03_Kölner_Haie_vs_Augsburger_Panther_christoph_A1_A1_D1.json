@@ -1,0 +1,22 @@
+{
+  "session_id": "2026-01-03_Kölner_Haie_vs_Augsburger_Panther_christoph_A1_A1_D1",
+  "user": "christoph",
+  "game": {
+    "date": "2026-01-03",
+    "league": "DEL",
+    "home": "Kölner Haie",
+    "away": "Augsburger Panther"
+  },
+  "module_id": "A1",
+  "drill_id": "A1_D1",
+  "pre": {
+    "goal": "Dreiecke in der D-Zone bewusst erkennen",
+    "confidence": 3,
+    "timestamp": "2026-01-03T01:33:24.978104"
+  },
+  "checkins": [],
+  "post": {},
+  "state": "cancelled",
+  "created_at": "2026-01-03T01:33:24.978130",
+  "updated_at": "2026-01-03T01:33:58.904075"
+}

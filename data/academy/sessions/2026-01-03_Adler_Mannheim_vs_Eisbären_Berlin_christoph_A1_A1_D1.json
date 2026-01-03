@@ -1,0 +1,28 @@
+{
+  "session_id": "2026-01-03_Adler_Mannheim_vs_Eisbären_Berlin_christoph_A1_A1_D1",
+  "user": "christoph",
+  "game": {
+    "date": "2026-01-03",
+    "league": "DEL",
+    "home": "Adler Mannheim",
+    "away": "Eisbären Berlin"
+  },
+  "module_id": "A1",
+  "drill_id": "A1_D1",
+  "pre": {
+    "goal": "Dreiecke in der D-Zone bewusst erkennen",
+    "confidence": 3,
+    "timestamp": "2026-01-03T01:47:41.081326"
+  },
+  "checkins": [],
+  "post": {
+    "summary": "",
+    "unclear": "",
+    "next_module": "",
+    "helpfulness": 3,
+    "timestamp": "2026-01-03T01:50:29.704395"
+  },
+  "state": "done",
+  "created_at": "2026-01-03T01:47:41.081349",
+  "updated_at": "2026-01-03T01:50:29.704421"
+}

@@ -1,5 +1,5 @@
 {
-  "user": "martin",
+  "user": "christoph",
   "game": {
     "date": "2026-01-02",
     "home": "ERC Ingolstadt",
@@ -7,34 +7,24 @@
     "matchday": 35
   },
   "focus": "CENTER_TRIANGLES",
-  "last_updated": "2026-01-02T20:56:23.640734",
+  "last_updated": "2026-01-02T20:56:23.343046",
   "periods": {
     "1": {
       "period": 1,
-      "timestamp": "2026-01-02T20:07:15.018308",
+      "timestamp": "2026-01-02T20:07:09.468473",
       "answers": {
         "center_position": "low",
         "triangle_rating": 3,
-        "breakout_quality": "gemischt",
+        "breakout_quality": "chaotisch",
         "note": ""
       }
     },
     "2": {
       "period": 2,
-      "timestamp": "2026-01-02T20:56:23.638475",
+      "timestamp": "2026-01-02T20:56:23.340707",
       "answers": {
-        "center_position": "low",
+        "center_position": "middle",
         "triangle_rating": 2,
-        "breakout_quality": "chaotisch",
-        "note": ""
-      }
-    },
-    "3": {
-      "period": 3,
-      "timestamp": "2026-01-02T13:33:03.606202",
-      "answers": {
-        "center_position": "low",
-        "triangle_rating": 3,
         "breakout_quality": "gemischt",
         "note": ""
       }

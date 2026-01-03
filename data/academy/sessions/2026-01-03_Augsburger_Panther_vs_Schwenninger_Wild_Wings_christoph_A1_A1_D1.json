@@ -1,0 +1,22 @@
+{
+  "session_id": "2026-01-03_Augsburger_Panther_vs_Schwenninger_Wild_Wings_christoph_A1_A1_D1",
+  "user": "christoph",
+  "game": {
+    "date": "2026-01-03",
+    "league": "DEL",
+    "home": "Augsburger Panther",
+    "away": "Schwenninger Wild Wings"
+  },
+  "module_id": "A1",
+  "drill_id": "A1_D1",
+  "pre": {
+    "goal": "Center-Positionierung (low/middle/high) verstehen",
+    "confidence": 3,
+    "timestamp": "2026-01-03T01:09:02.805370"
+  },
+  "checkins": [],
+  "post": {},
+  "state": "cancelled",
+  "created_at": "2026-01-03T01:09:02.805405",
+  "updated_at": "2026-01-03T01:11:39.001607"
+}

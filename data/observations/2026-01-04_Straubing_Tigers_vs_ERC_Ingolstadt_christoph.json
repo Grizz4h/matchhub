@@ -1,0 +1,23 @@
+{
+  "user": "christoph",
+  "game": {
+    "date": "2026-01-04",
+    "home": "Straubing Tigers",
+    "away": "ERC Ingolstadt",
+    "matchday": 36
+  },
+  "focus": "CENTER_TRIANGLES",
+  "last_updated": "2026-01-03T00:00:15.794140",
+  "periods": {
+    "3": {
+      "period": 3,
+      "timestamp": "2026-01-03T00:00:15.793444",
+      "answers": {
+        "center_position": "middle",
+        "triangle_rating": 2,
+        "breakout_quality": "gemischt",
+        "note": ""
+      }
+    }
+  }
+}
